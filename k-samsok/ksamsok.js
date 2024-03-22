@@ -2,6 +2,8 @@
 // it should not be too copy-paste friendly =)
 
 async function searchForThing(evt) {
+  evt.preventDefault()
+
   const thingInput = document.getElementById("thing");
   let thing = encodeURIComponent(thingInput.value);
 
@@ -30,6 +32,9 @@ function addAllObjects(records) {
       else if (val.desc) {
         res.desc = val.desc
       }
+      else if (val.thumbnail) {
+        res.thumbnailSource = val.thumbnail
+      }
     }
 
     addObject(results, res)
@@ -37,11 +42,15 @@ function addAllObjects(records) {
 }
 
 function addObject(parent, { desc, thumbnailSource }) {
+  if (thumbnailSource == undefined) {
+    return
+  }
+  
   const img = document.createElement('img')
   img.src = thumbnailSource
   img.alt = desc
   parent.append(img)
 }
 
-const searchAuthorButton = document.getElementById("searchThing");
-searchAuthorButton.addEventListener("click", searchForThing);
+const form = document.getElementById("search");
+form.addEventListener("submit", searchForThing);
